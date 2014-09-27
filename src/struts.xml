@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="true" />
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.action.extension" value="action"></constant>
+	
+	
+    <package name="lijinhuan" namespace="/" extends="struts-default">
+    
+   		<global-results>
+   			<result name="login">login.jsp</result>
+   		</global-results>
+		<action name="userAction_*" class="userAction" method="{1}">
+			<result name="toList" type="redirectAction">userAction_list</result>
+			<result name="saveUI">/WEB-INF/User/saveUI.jsp</result>
+			<result name="list">/WEB-INF/User/list.jsp</result>
+			<result name="editPasswordUI">/WEB-INF/Department/editPassword.jsp</result>
+			<result name="index" type="redirectAction">homeAction_index.action</result>
+			<result name="toLogin" type="redirect">login.jsp</result>
+		</action>
+		<action name="roleAction_*" class="roleAction" method="{1}">
+			<result name="toList" type="redirectAction">roleAction_list</result>
+			<result name="list">/WEB-INF/Role/list.jsp</result>
+			<result name="setPrivilegeUI">/WEB-INF/Role/setPrivilegeUI.jsp</result>
+			<result name="saveUI">/WEB-INF/Role/saveUI.jsp</result>
+		</action>
+		<action name="departmentAction_*" class="departmentAction" method="{1}">
+			<result name="toList" type="redirectAction">departmentAction_list.action</result>
+			<result name="list">/WEB-INF/Department/list.jsp</result>
+			<result name="saveUI">/WEB-INF/Department/saveUI.jsp</result>
+		</action>
+		
+		<action name="homeAction_*" class="homeAction" method="{1}">
+			<result name="index" >/WEB-INF/home/index.jsp</result>
+			<result name="left" >/WEB-INF/home/left.jsp</result>
+			<result name="right" >/WEB-INF/home/right.jsp</result>
+			<result name="head" >/WEB-INF/home/head.jsp</result>
+			<result name="tail" >/WEB-INF/home/tail.jsp</result>
+		</action>
+    </package>
+
+</struts>

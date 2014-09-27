@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+  		<context:annotation-config/> 
+		<context:component-scan base-package="com.lijinhuan" />
+		<context:property-placeholder location="classpath:jdbc.properties"/>		
+		<bean name="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		
+		<!-- 指定hibernate配置文件文职 -->
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+			<property name="dataSource" >
+				<bean class="com.mchange.v2.c3p0.ComboPooledDataSource">
+					<property name="jdbcUrl" value="${jdbcUrl}"></property>
+					<property name="driverClass" value="${driverClass}"></property>
+					<property name="user" value="${user}"></property>
+					<property name="password" value="${password}"></property>
+				</bean>
+			</property>
+		</bean>
+		
+		<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
+		
+		
+		<tx:advice id="txAdvice" transaction-manager="txManager">
+			<tx:attributes>
+				<tx:method name="find*" read-only="true"/>
+				<tx:method name="*"/>
+			</tx:attributes>
+		</tx:advice>
+		
+		<aop:config>
+		<!-- ,execution(public * com.lijinhuan.util.InstallPrivilegeData.*.*(..)) -->
+			<aop:pointcut id="myPointCut" expression="execution(public * com.lijinhuan.service.*.*(..))"/>
+			<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointCut"/>
+		</aop:config>
+		
+		<aop:config>
+		<!-- ,execution(public * com.lijinhuan.util.InstallPrivilegeData.*.*(..)) -->
+			<aop:pointcut id="myPointCut1" expression="execution(public * com.lijinhuan.util.*.*(..))"/>
+			<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointCut1"/>
+		</aop:config>
+</beans>
